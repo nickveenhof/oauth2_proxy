@@ -402,6 +402,7 @@ func parseProviderInfo(o *Options, msgs []string) []string {
 	p.ProfileURL, msgs = parseURL(o.ProfileURL, "profile", msgs)
 	p.ValidateURL, msgs = parseURL(o.ValidateURL, "validate", msgs)
 	p.ProtectedResource, msgs = parseURL(o.ProtectedResource, "resource", msgs)
+	p.JwtBearerVerifiers = o.jwtBearerVerifiers
 
 	o.provider = providers.New(o.Provider, p)
 	switch p := o.provider.(type) {
@@ -484,6 +485,8 @@ func parseProviderInfo(o *Options, msgs []string) []string {
 				p.JWTKey = signKey
 			}
 		}
+	case *providers.DropsolidProvider:
+		p.PubJWKURL, msgs = parseURL(o.PubJWKURL, "pubjwk", msgs)
 	}
 	return msgs
 }
